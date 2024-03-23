@@ -10,6 +10,7 @@ urlpatterns= [
     path('logout',views.logout_page,name="logout"),
     path('cart',views.cart_page,name="cart"),
     path('fav',views.fav_page,name="fav"),
+    path('search/', views.search_view, name='search'),
     path('favviewpage',views.favviewpage,name="favviewpage"),
     path('remove_fav/<str:cid>',views.remove_fav,name='remove_fav'),
     path('remove_cart/<str:cid>',views.remove_cart,name='remove_cart'),

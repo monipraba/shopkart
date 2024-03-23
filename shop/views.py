@@ -7,6 +7,9 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate,login,logout
 import json
 
+
+
+
 def home(request):
     products=Product.objects.filter(trending=1)
     return render(request,"shop/index.html",{"products":products})
@@ -30,8 +33,8 @@ def cart_page(request):
     else:
         return redirect("/")
 
-def remove_cart(request,fid):
-    cartitem=Cart.objects.get(id=fid)
+def remove_cart(request,cid):
+    cartitem=Cart.objects.get(id=cid) 
     cartitem.delete()
     return redirect("/cart")
     
@@ -109,13 +112,20 @@ def register(request):
             return redirect('/login')
     return render(request,"shop/register.html",{'form':form})
 
+def search_view(request):
+    query = request.GET.get('q')
+    if query:
+        results = Search.objects.filter(description__icontains=query)
+    return render(request, 'shop/inc/search_results.html', {'results': results, 'query': query})
+
+
 def collections(request):
     catagory=Catagory.objects.filter(status=0)
     return render(request,"shop/collections.html",{"catagory":catagory})
 
 def collectionsview(request,name):
     if(Catagory.objects.filter(name=name,status=0)):
-        products=Product.objects.filter(catagory__name=name)
+        products=Products.objects.filter(catagory__name=name)
         return render(request,"shop/products/index.html",{"products":products,"catagory_name":name})
     else:
         messages.warning(request,"No Such Catagory Found")
