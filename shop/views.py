@@ -5,6 +5,7 @@ from . models import *
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate,login,logout
+from .models import Product
 import json
 
 
@@ -114,9 +115,10 @@ def register(request):
 
 def search_view(request):
     query = request.GET.get('q')
+    products = None 
     if query:
-        results = Search.objects.filter(description__icontains=query)
-    return render(request, 'shop/inc/search_results.html', {'results': results, 'query': query})
+        products = Product.objects.filter(description__icontains=query)
+    return render(request, 'shop/inc/search_results.html', {'products': products, 'query': query})
 
 
 def collections(request):
@@ -125,7 +127,7 @@ def collections(request):
 
 def collectionsview(request,name):
     if(Catagory.objects.filter(name=name,status=0)):
-        products=Products.objects.filter(catagory__name=name)
+        products=Product.objects.filter(catagory__name=name)   
         return render(request,"shop/products/index.html",{"products":products,"catagory_name":name})
     else:
         messages.warning(request,"No Such Catagory Found")
@@ -143,3 +145,27 @@ def product_details(request,cname,pname):
     else:
         messages.error(request,"No Such Catagory Found")
         return redirect('collections')
+
+ 
+def buyproduct(request,product_id):
+    user=request.user
+    product_id=request.GET.get('product_id')
+    product=Product.objects.get(id=product_id)
+    buyproduct(user=user,product=product).save()
+    return redirect("/buyproduct")
+
+
+def show_cart(request):
+    user = request.user
+    cart = Cart.objects.filter(User=User)
+    amount = 0
+    for p in cart:
+        value = p.quantity * p.product.discounted_price
+        amount = amount + value
+    totalamount = amount + 40
+    return render(request, "shop/Templates/inc/buyproduct.html", locals())
+
+
+
+
+    

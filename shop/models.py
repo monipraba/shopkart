@@ -54,3 +54,15 @@ class Search(models.Model):
 
     def __str__(self):
         return self.description
+
+class Buyproduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_qty=models.PositiveIntegerField(default=1)
+    created_at=models.DateTimeField(auto_now_add=True )
+    customer_name = models.CharField(max_length=100)
+    customer_address = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, default='pending')
+
+    @property 
+    def total_cost(self):
+      return self.quantity * self.product.selling_price

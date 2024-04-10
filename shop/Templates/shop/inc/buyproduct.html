@@ -1,0 +1,63 @@
+{% extends 'shop/main.html' %}
+{% block title %}
+{% endblock title %}
+{% block content %}
+<div class="container my-5">
+
+  <div class="row">
+    {% if products %}
+    <div class="container" style="margin-top :70px ;">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="mb-3">Shopping Product</h4>
+          <hr style="border-color: aliceblue ;">
+        </div>
+          {% for item in products %}
+              <div class="col-md-4 col-lg-3">
+                <div class="card my-3">
+                  <img src="{{item.product_image.url}}" class="card-image-top" alt="Categories">
+                  <a href="{% url 'product_details' item.catagory.name item.name %}">
+                  <div class="card-body">
+                    <h5 class="card-title text-primary">{{ item.name }}</h5>
+                    <p class="card-text">
+                      <span class="float-start old_price"><s>Rs.{{ item.original_price | stringformat:'d'}}</s></span>
+                      <span class="float-end new_price">Rs.{{ item.selling_price  | stringformat:'d'}}</span>
+                    </p>               
+                  </div>
+                  </a> 
+                </div>          
+              </div>
+            {% endfor %}
+        </div>
+      </div>
+
+<div class="col-sm-4">
+  <div class="row">
+      <h3>Total Amount :</h3>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-self-center border-0 px-0 pb-0" >Amount <span id="amount">Rs. {{amount}}          
+        </span></li>
+        <li class="list-group-item d-flex justify-content-between align-self-center px-0">Shipping <span>Rs. 40.00</span></li>
+        <li class="list-group-item d-flex justify-content-between align-self-center border-0 px-0 mb-3">
+          <div>
+            <strong>Total</strong> <small>{Including GST}</small>
+          </div>
+          <span id="totalamount"><strong>Rs. {{totalamount}}</strong></span>
+        </li>
+      </ul>
+      <div class="d-grid"><a href="{% url 'product_id' %}" class="btn btn-primary">Place Order</a></div>
+    </div>    
+  </div>
+</div>
+{% else %}
+<div class="container" style="margin-top :70px ;">
+  <div class="row">
+    <div class="col-12">
+      <h4 class="mb-3">No Results found</h4>
+      <hr style="border-color: aliceblue ;">
+    </div>
+  </div>
+</div>
+{% end if %}
+</div>
+</div>

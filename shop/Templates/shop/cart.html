@@ -3,7 +3,7 @@
    Registration | ShopKart
 {% endblock title %}
 {% block content %}
-    <section class="bg-light py-4 my-5">
+    <section class="bg-light py-4 my-5" style="min-height:400px;">
       <div class="container">
         <div class="row">
           <div class="col-12">
@@ -28,26 +28,30 @@
                 <td>{{item.product_qty}}</td>
                 <td class="amt">{{item.total_cost | stringformat:'d'}}</td>
                 <td><a href="{% url 'remove_cart' item.id %}" onclick="return confirm('Are You sure? to Remove')"  class="btn btn-danger btn-sm "><i class="fa fa-trash"></i> Remove</a></td>
-            </tr>
+               
           {% endfor %}
           <tr>
             <td></td>
             <td></td>
             <td colspan="2"><b>Total Amount</b></td>
             <td id="net">0</td>
+            <form action="/buyproduct" class="d-inline">
+              <input type="hidden" name="product_id" value={{product.id}} />
+            <td><div class="button-container" ><button class="btn btn-warning" id="btnBuyNow"><i class="fa fa-shopping-cart"></i> Buy Now </button></td>
+              <a href="showcart"></a>
+          </form>
           </tr>
           </table>
         </div>
       </div>
-    </section>
-    
+    </section> 
     <script>
       const nodes = document.querySelectorAll('.amt');
       const arr = Array.from(nodes);
       const res = arr.reduce((acc, curr) => {
         return acc += Number(curr.textContent);
       }, 0);
-      document.getElementById("net").innerHTML="Rs : "+res;
+      document.getElementById("net").innerHTML="Rs : "+res;  
     </script>
     
 
